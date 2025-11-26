@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  application:
+    build: .
+    image: spring-boot-mysql:latest
+    container_name: spring-container
+    ports:
+      - "8080:8080"
+    networks:
+      - docker-mysql
+    depends_on:
+      - mysqldb
+    deploy:
+      restart_policy:
+        condition: on-failure
+        max_attempts: 10
+
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqldb-container
+    ports:
+      - "3306:3306"
+    networks:
+      - docker-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: Swain@123
+      MYSQL_DATABASE: demo_db
+
+networks:
+  docker-mysql:
